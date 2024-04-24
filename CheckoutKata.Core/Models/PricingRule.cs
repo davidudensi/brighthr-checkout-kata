@@ -2,7 +2,7 @@ namespace CheckoutKata.Core.Models
 {
     public class PricingRule
     {
-        public char SKU { get; set; }
+        public string SKU { get; set; } = string.Empty;
         public int UnitPrice { get; set; }
         public bool HasSpecialPrice { get; private set; }
         public SpecialPrice? SpecialPrice { get; private set; }

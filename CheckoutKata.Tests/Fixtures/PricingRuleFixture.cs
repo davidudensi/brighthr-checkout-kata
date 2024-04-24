@@ -7,13 +7,13 @@ namespace CheckoutKata.Tests.Fixtures
         private static readonly SpecialPrice specialPrice = SpecialPriceFixture.GetSpecialPrice();
         public static PricingRule GetRegularPricingRule() => new()
         {
-            SKU = 'A',
+            SKU = "A",
             UnitPrice = 50,
         };
 
         public static PricingRule GetSpecialPricingRule() => new(specialPrice)
         {
-            SKU = 'A',
+            SKU = "A",
             UnitPrice = 50,
         };
     }
