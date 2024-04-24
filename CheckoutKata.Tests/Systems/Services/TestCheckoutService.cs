@@ -24,7 +24,7 @@ namespace CheckoutKata.Tests.Systems.Services
         {
             var rules_string = File.ReadAllText("rules-two.json");
             var sut = new CheckoutService(rules_string);
-            sut.PricingRules.Should().HaveCount(1);
+            sut.Rules.Should().HaveCount(1);
         }
 
         [Fact]
@@ -32,7 +32,7 @@ namespace CheckoutKata.Tests.Systems.Services
         {
             var rules_string = File.ReadAllText("rules-replace.json");
             var sut = new CheckoutService(rules_string);
-            var rule = sut.PricingRules.Where(x => x.SKU == "A").FirstOrDefault();
+            var rule = sut.Rules.Where(x => x.SKU == "A").FirstOrDefault();
             Assert.Equal(75, rule?.UnitPrice);
         }
 

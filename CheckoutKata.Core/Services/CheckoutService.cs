@@ -7,7 +7,7 @@ namespace CheckoutKata.Core.Services
 {
     public class CheckoutService : ICheckout
     {
-        public List<PricingRule> PricingRules { get; set; }
+        public List<PricingRule> Rules { get; set; }
         public List<CartItem> CartItems { get; set; }
         public CheckoutService(string rules)
         {
@@ -15,7 +15,7 @@ namespace CheckoutKata.Core.Services
 
             try
             {
-                PricingRules = new List<PricingRule>();
+                Rules = new List<PricingRule>();
                 CartItems = new List<CartItem>();
 
                 var pricingDtos = JsonConvert.DeserializeObject<List<PricingRuleDto>>(rules);
@@ -25,13 +25,14 @@ namespace CheckoutKata.Core.Services
                 {
                     if (string.IsNullOrEmpty(newRule.SKU)) continue;
 
-                    var existingRule = PricingRules.Where(x => x.SKU == newRule.SKU).FirstOrDefault();
-                    if (existingRule != null) PricingRules.Remove(existingRule);
+                    newRule.SKU = newRule.SKU.ToUpper();
+                    var existingRule = Rules.Where(x => x.SKU == newRule.SKU).FirstOrDefault();
+                    if (existingRule != null) Rules.Remove(existingRule);
 
                     if (newRule.SpecialPrice != null)
-                        PricingRules.Add(new PricingRule(newRule.SKU, newRule.UnitPrice, newRule.SpecialPrice));
+                        Rules.Add(new PricingRule(newRule.SKU, newRule.UnitPrice, newRule.SpecialPrice));
                     else
-                        PricingRules.Add(new PricingRule(newRule.SKU, newRule.UnitPrice));
+                        Rules.Add(new PricingRule(newRule.SKU, newRule.UnitPrice));
                 }
             }
             catch (Exception ex)
@@ -45,9 +46,19 @@ namespace CheckoutKata.Core.Services
             return 0;
         }
 
-        public void Scan(string item)
+        public void Scan(string items)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(items)) throw new NullReferenceException();
+
+            List<char> skus = items.ToList();
+            foreach (char sku in skus)
+            {
+                var sku_string = sku.ToString();
+                var rule = Rules.Where(x => x.SKU == sku_string).FirstOrDefault();
+                if (rule == null) continue;
+
+                // var existingItem = CartItems['']
+            }
         }
     }
 }
