@@ -7,19 +7,25 @@ namespace CheckoutKata.Tests.Systems.Services
     public class TestCheckoutService
     {
         [Fact]
-        public void CheckoutServiceConstructor_IfRulesAreNullOrEmptyShould_ThrowNullException()
+        public void Constructor_IfRulesAreNullOrEmptyShould_ThrowNullException()
         {
             Assert.Throws<NullReferenceException>(() => new CheckoutService(""));
         }
 
         [Fact]
-        public void CheckoutServiceConstructor_IfRulesAreWrongDtoFormatShould_ThrowException()
+        public void Constructor_IfRulesAreWrongDtoFormatShould_ThrowException()
         {
             var rules_string = File.ReadAllText("rules-wrong-format.json");
             Assert.Throws<Exception>(() => new CheckoutService(rules_string));
         }
 
-        
+        [Fact]
+        public void Constructor_ShouldSkipNullEmptySKUs_CreateOneNotTwo()
+        {
+            var rules_string = File.ReadAllText("rules-two.json");
+            var sut = new CheckoutService(rules_string);
+            sut.PricingRules.Should().HaveCount(1);
+        }
 
         // [Fact]
         // public void GetTotalPrice_WhenCalled_ShouldReturn_Integer()

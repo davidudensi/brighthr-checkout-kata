@@ -6,7 +6,6 @@ namespace CheckoutKata.Core.Dtos
     {
         public string SKU { get; set; } = string.Empty;
         public int UnitPrice { get; set; }
-        public bool HasSpecialPrice { get; set; }
         public SpecialPrice? SpecialPrice { get; set; }
     }
 }

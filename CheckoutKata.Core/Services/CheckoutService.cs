@@ -14,16 +14,18 @@ namespace CheckoutKata.Core.Services
 
             try
             {
+                PricingRules = new List<PricingRule>();
                 var pricingDtos = JsonConvert.DeserializeObject<List<PricingRuleDto>>(rules);
                 if (pricingDtos == null) return;
 
-                foreach (var pricing in pricingDtos)
+                foreach (var newRule in pricingDtos)
                 {
-                    if(string.IsNullOrEmpty(pricing.SKU)) continue;
-                    if (pricing.SpecialPrice != null)
-                    {
+                    if (string.IsNullOrEmpty(newRule.SKU)) continue;
 
-                    }
+                    if (newRule.SpecialPrice != null)
+                        PricingRules.Add(new PricingRule(newRule.SKU, newRule.UnitPrice, newRule.SpecialPrice));
+                    else
+                        PricingRules.Add(new PricingRule(newRule.SKU, newRule.UnitPrice));
                 }
             }
             catch (Exception ex)
