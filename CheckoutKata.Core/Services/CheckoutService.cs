@@ -6,7 +6,7 @@ namespace CheckoutKata.Core.Services
     {
         public int GetTotalPrice()
         {
-            throw new NotImplementedException();
+            return 0;
         }
     }
 }

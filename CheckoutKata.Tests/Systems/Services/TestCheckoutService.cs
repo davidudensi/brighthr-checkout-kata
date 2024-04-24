@@ -1,4 +1,5 @@
 using CheckoutKata.Core.Services;
+using FluentAssertions;
 
 namespace CheckoutKata.Tests.Systems.Services
 {
@@ -9,7 +10,7 @@ namespace CheckoutKata.Tests.Systems.Services
         {
             var sut = new CheckoutService();
             var result = sut.GetTotalPrice();
-            result.Should().BeOfType<int>();
+            Assert.True(result.GetType() == typeof(int));
         }
     }
 }
