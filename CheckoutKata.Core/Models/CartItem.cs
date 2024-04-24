@@ -3,15 +3,35 @@ namespace CheckoutKata.Core.Models
     public class CartItem
     {
         public string SKU { get; set; }
-        public int Quantity { get; set; }
-        public double Amount { get; set; }
+        public double Amount { get; private set; }
         public PricingRule Rule { get; set; }
 
-        public CartItem(string sku, int quantity, double amount, PricingRule? rule = null)
+        public CartItem(string sku, PricingRule rule)
         {
             SKU = sku;
-            Quantity = quantity;
-            Amount = amount;
+            Rule = rule;
+            Quantity = 1;
+        }
+
+        private int quantity;
+        public int Quantity
+        {
+            get { return quantity; }
+            set
+            {
+                if (value >= Rule.SpecialPrice?.Units)
+                {
+                    int band = value / Rule.SpecialPrice?.Units ?? 0;
+                    int rem = value % Rule.SpecialPrice?.Units ?? 0;
+
+                    Amount = (band * Rule.SpecialPrice?.Price) + (rem * Rule.UnitPrice) ?? 0;
+                }
+                else
+                {
+                    Amount = Rule.UnitPrice;
+                }
+                quantity = value;
+            }
         }
     }
 }

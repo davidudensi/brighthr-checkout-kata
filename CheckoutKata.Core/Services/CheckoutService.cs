@@ -7,16 +7,16 @@ namespace CheckoutKata.Core.Services
 {
     public class CheckoutService : ICheckout
     {
-        public List<PricingRule> Rules { get; set; }
-        public List<CartItem> CartItems { get; set; }
+        public Dictionary<string, PricingRule> Rules { get; set; }
+        public Dictionary<string, CartItem> CartItems { get; set; }
         public CheckoutService(string rules)
         {
             if (string.IsNullOrEmpty(rules)) throw new NullReferenceException();
 
             try
             {
-                Rules = new List<PricingRule>();
-                CartItems = new List<CartItem>();
+                Rules = new Dictionary<string, PricingRule>();
+                CartItems = new Dictionary<string, CartItem>();
 
                 var pricingDtos = JsonConvert.DeserializeObject<List<PricingRuleDto>>(rules);
                 if (pricingDtos == null) return;
@@ -26,13 +26,8 @@ namespace CheckoutKata.Core.Services
                     if (string.IsNullOrEmpty(newRule.SKU)) continue;
 
                     newRule.SKU = newRule.SKU.ToUpper();
-                    var existingRule = Rules.Where(x => x.SKU == newRule.SKU).FirstOrDefault();
-                    if (existingRule != null) Rules.Remove(existingRule);
-
-                    if (newRule.SpecialPrice != null)
-                        Rules.Add(new PricingRule(newRule.SKU, newRule.UnitPrice, newRule.SpecialPrice));
-                    else
-                        Rules.Add(new PricingRule(newRule.SKU, newRule.UnitPrice));
+                    if (Rules.ContainsKey(newRule.SKU)) Rules.Remove(newRule.SKU);
+                    Rules.Add(newRule.SKU, new PricingRule(newRule.SKU, newRule.UnitPrice, newRule.SpecialPrice));
                 }
             }
             catch (Exception ex)
@@ -54,10 +49,16 @@ namespace CheckoutKata.Core.Services
             foreach (char sku in skus)
             {
                 var sku_string = sku.ToString();
-                var rule = Rules.Where(x => x.SKU == sku_string).FirstOrDefault();
-                if (rule == null) continue;
+                if (!Rules.ContainsKey(sku_string)) continue;
 
-                // var existingItem = CartItems['']
+                var rule = Rules[sku_string];
+                if (CartItems.ContainsKey(sku_string))
+                    CartItems[sku_string].Quantity++;
+                else
+                {
+                    var item = new CartItem(sku_string, rule);
+                    CartItems[sku_string] = item;
+                }
             }
         }
     }

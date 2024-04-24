@@ -1,4 +1,3 @@
-using CheckoutKata.Core.Models;
 using CheckoutKata.Core.Services;
 using FluentAssertions;
 
@@ -32,17 +31,28 @@ namespace CheckoutKata.Tests.Systems.Services
         {
             var rules_string = File.ReadAllText("rules-replace.json");
             var sut = new CheckoutService(rules_string);
-            var rule = sut.Rules.Where(x => x.SKU == "A").FirstOrDefault();
+            var rule = sut.Rules["A"];
             Assert.Equal(75, rule?.UnitPrice);
         }
 
         [Fact]
-        public void Scan_WhenCalled_UpdatesCart_WithSKUs()
+        public void Scan_WhenCalled_UpdatesCart_WithSKUs_CountShouldBe4()
         {
-            var sut = new CheckoutService("");
+            var rules_string = File.ReadAllText("rules.json");
+            var sut = new CheckoutService(rules_string);
             sut.CartItems.Clear();
             sut.Scan("ABCD");
             sut.CartItems.Should().HaveCount(4);
+        }
+
+        [Fact]
+        public void Scan_WhenCalled_UpdatesCart_WithSKUs_CountShouldBe3()
+        {
+            var rules_string = File.ReadAllText("rules.json");
+            var sut = new CheckoutService(rules_string);
+            sut.CartItems.Clear();
+            sut.Scan("AACD");
+            sut.CartItems.Should().HaveCount(3);
         }
 
         // [Fact]
