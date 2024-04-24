@@ -1,5 +1,4 @@
 using CheckoutKata.Core.Services;
-using FluentAssertions;
 
 namespace CheckoutKata.Tests.Systems.Services
 {
