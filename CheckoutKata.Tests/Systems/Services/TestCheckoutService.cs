@@ -27,6 +27,24 @@ namespace CheckoutKata.Tests.Systems.Services
             sut.PricingRules.Should().HaveCount(1);
         }
 
+        [Fact]
+        public void Constructor_ShouldReplaceOldRule_WithNewerRule_UnitPrice_ShouldBe75()
+        {
+            var rules_string = File.ReadAllText("rules-replace.json");
+            var sut = new CheckoutService(rules_string);
+            var rule = sut.PricingRules.Where(x => x.SKU == "A").FirstOrDefault();
+            Assert.Equal(75, rule?.UnitPrice);
+        }
+
+        [Fact]
+        public void Scan_WhenCalled_UpdatesCart_WithSKUs()
+        {
+            var sut = new CheckoutService("");
+            sut.CartItems.Clear();
+            sut.Scan("ABCD");
+            sut.CartItems.Should().HaveCount(4);
+        }
+
         // [Fact]
         // public void GetTotalPrice_WhenCalled_ShouldReturn_Integer()
         // {
