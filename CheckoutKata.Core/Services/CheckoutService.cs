@@ -12,27 +12,9 @@ namespace CheckoutKata.Core.Services
         public CheckoutService(string rules)
         {
             if (string.IsNullOrEmpty(rules)) throw new NullReferenceException();
-            try
-            {
-                Rules = new Dictionary<string, PricingRule>();
-                CartItems = new Dictionary<string, CartItem>();
-
-                var pricingDtos = JsonConvert.DeserializeObject<List<PricingRuleDto>>(rules);
-                if (pricingDtos == null) return;
-
-                foreach (var newRule in pricingDtos)
-                {
-                    if (string.IsNullOrEmpty(newRule.SKU)) continue;
-
-                    newRule.SKU = newRule.SKU.ToUpper();
-                    if (Rules.ContainsKey(newRule.SKU)) Rules.Remove(newRule.SKU);
-                    Rules.Add(newRule.SKU, new PricingRule(newRule.SKU, newRule.UnitPrice, newRule.SpecialPrice));
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.ToString());
-            }
+            Rules = new Dictionary<string, PricingRule>();
+            CartItems = new Dictionary<string, CartItem>();
+            SetRules(rules);
         }
         public int GetTotalPrice()
         {
@@ -71,6 +53,28 @@ namespace CheckoutKata.Core.Services
         public void ClearCart()
         {
             CartItems.Clear();
+        }
+
+        private void SetRules(string rules)
+        {
+            try
+            {
+                var pricingDtos = JsonConvert.DeserializeObject<List<PricingRuleDto>>(rules);
+                if (pricingDtos == null) return;
+
+                foreach (var newRule in pricingDtos)
+                {
+                    if (string.IsNullOrEmpty(newRule.SKU)) continue;
+
+                    newRule.SKU = newRule.SKU.ToUpper();
+                    if (Rules.ContainsKey(newRule.SKU)) Rules.Remove(newRule.SKU);
+                    Rules.Add(newRule.SKU, new PricingRule(newRule.SKU, newRule.UnitPrice, newRule.SpecialPrice));
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
         }
     }
 }

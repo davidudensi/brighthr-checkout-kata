@@ -44,7 +44,7 @@ namespace CheckoutKata.Tests.Systems.Services
         {
             var rules_string = File.ReadAllText("rules.json");
             var sut = new CheckoutService(rules_string);
-            sut.CartItems.Clear();
+            sut.ClearCart();
             sut.Scan(items);
             sut.CartItems.Should().HaveCount(result);
         }
@@ -54,7 +54,7 @@ namespace CheckoutKata.Tests.Systems.Services
         {
             var rules_string = File.ReadAllText("rules.json");
             var sut = new CheckoutService(rules_string);
-            sut.CartItems.Clear();
+            sut.ClearCart();
             Assert.Throws<NullReferenceException>(() => sut.Scan(""));
         }
 
@@ -92,6 +92,21 @@ namespace CheckoutKata.Tests.Systems.Services
             sut.Scan(items);
             var total = sut.GetTotalPrice();
             total.Should().Be(expected);
+        }
+
+        [Theory]
+        [InlineData("ABCD")]
+        [InlineData("AACD")]
+        [InlineData("AAAA")]
+        [InlineData("AABB")]
+        public void GetTotalPrice_WhenCartItems_IsCleared_ShouldReturn0(string items)
+        {
+            var rules_string = File.ReadAllText("rules.json");
+            var sut = new CheckoutService(rules_string);
+            sut.Scan(items);
+            sut.ClearCart();
+            var total = sut.GetTotalPrice();
+            total.Should().Be(0);
         }
     }
 }
