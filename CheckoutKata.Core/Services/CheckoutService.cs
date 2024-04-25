@@ -36,7 +36,9 @@ namespace CheckoutKata.Core.Services
         }
         public int GetTotalPrice()
         {
-            return 0;
+            if (CartItems == null || CartItems.Count == 0) return 0;
+            int total = CartItems.Values.Sum(c => c.Amount);
+            return total;
         }
 
         public void Scan(string items)

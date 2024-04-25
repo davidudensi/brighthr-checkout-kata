@@ -68,12 +68,28 @@ namespace CheckoutKata.Tests.Systems.Services
             sut.CartItems.Should().HaveCount(0);
         }
 
-        // [Fact]
-        // public void GetTotalPrice_WhenCalled_ShouldReturn_Integer()
-        // {
-        //     var sut = new CheckoutService("");
-        //     var result = sut.GetTotalPrice();
-        //     Assert.True(result.GetType() == typeof(int));
-        // }
+        [Fact]
+        public void GetTotalPrice_WhenCalled_ShouldReturn_Integer()
+        {
+            var rules_string = File.ReadAllText("rules.json");
+            var sut = new CheckoutService(rules_string);
+            sut.Scan("A");
+            var result = sut.GetTotalPrice();
+            Assert.True(result.GetType() == typeof(int));
+        }
+
+        [Theory]
+        [InlineData("A", 50)]
+        [InlineData("AA", 100)]
+        [InlineData("AAA", 130)]
+        [InlineData("AAAA", 180)]
+        public void GetTotalPrice_WhenCalled_ShouldCalculate_Total(string items, int expected)
+        {
+            var rules_string = File.ReadAllText("rules.json");
+            var sut = new CheckoutService(rules_string);
+            sut.Scan(items);
+            var total = sut.GetTotalPrice();
+            total.Should().Be(expected);
+        }
     }
 }
