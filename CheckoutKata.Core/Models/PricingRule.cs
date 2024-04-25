@@ -4,7 +4,6 @@ namespace CheckoutKata.Core.Models
     {
         public string SKU { get; private set; }
         public double UnitPrice { get; set; }
-        public bool HasSpecialPrice { get; private set; }
         public SpecialPrice? SpecialPrice { get; set; }
 
 
@@ -13,7 +12,6 @@ namespace CheckoutKata.Core.Models
             SKU = sku;
             UnitPrice = unitPrice;
             SpecialPrice = specialPrice;
-            HasSpecialPrice = SpecialPrice != null;
         }
     }
 }

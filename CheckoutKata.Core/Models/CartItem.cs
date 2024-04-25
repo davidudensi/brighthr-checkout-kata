@@ -13,10 +13,10 @@ namespace CheckoutKata.Core.Models
             Quantity = 1;
         }
 
-        private int quantity;
+        private int _quantity;
         public int Quantity
         {
-            get { return quantity; }
+            get { return _quantity; }
             set
             {
                 if (value >= Rule.SpecialPrice?.Units)
@@ -28,9 +28,9 @@ namespace CheckoutKata.Core.Models
                 }
                 else
                 {
-                    Amount = Rule.UnitPrice;
+                    Amount = value * Rule.UnitPrice;
                 }
-                quantity = value;
+                _quantity = value;
             }
         }
     }
