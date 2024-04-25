@@ -12,7 +12,6 @@ namespace CheckoutKata.Core.Services
         public CheckoutService(string rules)
         {
             if (string.IsNullOrEmpty(rules)) throw new NullReferenceException();
-
             try
             {
                 Rules = new Dictionary<string, PricingRule>();
@@ -34,7 +33,6 @@ namespace CheckoutKata.Core.Services
             {
                 throw new Exception(ex.ToString());
             }
-
         }
         public int GetTotalPrice()
         {
@@ -44,22 +42,33 @@ namespace CheckoutKata.Core.Services
         public void Scan(string items)
         {
             if (string.IsNullOrEmpty(items)) throw new NullReferenceException();
-
-            List<char> skus = items.ToList();
-            foreach (char sku in skus)
+            try
             {
-                var sku_string = sku.ToString();
-                if (!Rules.ContainsKey(sku_string)) continue;
-
-                var rule = Rules[sku_string];
-                if (CartItems.ContainsKey(sku_string))
-                    CartItems[sku_string].Quantity++;
-                else
+                List<char> skus = items.ToList();
+                foreach (char sku in skus)
                 {
-                    var item = new CartItem(sku_string, rule);
-                    CartItems[sku_string] = item;
+                    var sku_string = sku.ToString();
+                    if (!Rules.ContainsKey(sku_string)) continue;
+
+                    var rule = Rules[sku_string];
+                    if (CartItems.ContainsKey(sku_string))
+                        CartItems[sku_string].Quantity++;
+                    else
+                    {
+                        var item = new CartItem(sku_string, rule);
+                        CartItems[sku_string] = item;
+                    }
                 }
             }
+            catch (Exception)
+            {
+                throw new Exception();
+            }
+        }
+
+        public void ClearCart()
+        {
+            CartItems.Clear();
         }
     }
 }
