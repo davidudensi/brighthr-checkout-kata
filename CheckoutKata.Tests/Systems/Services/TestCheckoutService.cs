@@ -35,24 +35,37 @@ namespace CheckoutKata.Tests.Systems.Services
             Assert.Equal(75, rule?.UnitPrice);
         }
 
-        [Fact]
-        public void Scan_WhenCalled_UpdatesCart_WithSKUs_CountShouldBe4()
+        [Theory]
+        [InlineData("ABCD", 4)]
+        [InlineData("AACD", 3)]
+        [InlineData("AAAA", 1)]
+        [InlineData("AABB", 2)]
+        public void Scan_WhenCalled_UpdatesCart_WithSKUs_CountShouldBeResult(string items, int result)
         {
             var rules_string = File.ReadAllText("rules.json");
             var sut = new CheckoutService(rules_string);
             sut.CartItems.Clear();
-            sut.Scan("ABCD");
-            sut.CartItems.Should().HaveCount(4);
+            sut.Scan(items);
+            sut.CartItems.Should().HaveCount(result);
         }
 
         [Fact]
-        public void Scan_WhenCalled_UpdatesCart_WithSKUs_CountShouldBe3()
+        public void Scan_WhenCalled_UpdatesCart_WithEmptySKUs_ShouldThrowNullReferenceException()
         {
             var rules_string = File.ReadAllText("rules.json");
             var sut = new CheckoutService(rules_string);
             sut.CartItems.Clear();
-            sut.Scan("AACD");
-            sut.CartItems.Should().HaveCount(3);
+            Assert.Throws<NullReferenceException>(() => sut.Scan(""));
+        }
+
+        [Fact]
+        public void ClearCart_WhenCalled_ShouldSetCartItems_Equals0()
+        {
+            var rules_string = File.ReadAllText("rules.json");
+            var sut = new CheckoutService(rules_string);
+            sut.Scan("ABCD");
+            sut.ClearCart();
+            sut.CartItems.Should().HaveCount(0);
         }
 
         // [Fact]
@@ -61,15 +74,6 @@ namespace CheckoutKata.Tests.Systems.Services
         //     var sut = new CheckoutService("");
         //     var result = sut.GetTotalPrice();
         //     Assert.True(result.GetType() == typeof(int));
-        // }
-
-        // [Fact]
-        // public void Scan_WhenCalled_ShouldCreateNonEmpty_ListOfPricingRules()
-        // {
-        //     var rules_string = File.ReadAllText("rules.json");
-        //     var sut = new CheckoutService(rules_string);
-        //     var result = sut.PricingRules;
-        //     result.Should().BeOfType<List<PricingRule>>();
         // }
     }
 }
