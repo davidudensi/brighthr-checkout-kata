@@ -17,20 +17,29 @@ namespace CheckoutKata.Core.Models
         public int Quantity
         {
             get { return _quantity; }
-            set
+            set { SetAmount(value); }
+        }
+
+        private void SetAmount(int quantity)
+        {
+            try
             {
-                if (value >= Rule.SpecialPrice?.Units)
+                if (quantity >= Rule.SpecialPrice?.Units)
                 {
-                    int band = value / Rule.SpecialPrice?.Units ?? 0;
-                    int rem = value % Rule.SpecialPrice?.Units ?? 0;
+                    int band = quantity / Rule.SpecialPrice?.Units ?? 0;
+                    int rem = quantity % Rule.SpecialPrice?.Units ?? 0;
 
                     Amount = (band * Rule.SpecialPrice?.Price) + (rem * Rule.UnitPrice) ?? 0;
                 }
                 else
                 {
-                    Amount = value * Rule.UnitPrice;
+                    Amount = quantity * Rule.UnitPrice;
                 }
-                _quantity = value;
+                _quantity = quantity;
+            }
+            catch (Exception)
+            {
+                throw new Exception();
             }
         }
     }
