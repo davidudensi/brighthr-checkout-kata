@@ -83,6 +83,8 @@ namespace CheckoutKata.Tests.Systems.Services
         [InlineData("AA", 100)]
         [InlineData("AAA", 130)]
         [InlineData("AAAA", 180)]
+        [InlineData("AAAAA", 230)]
+        [InlineData("AAAAAA", 260)]
         public void GetTotalPrice_WhenCalled_ShouldCalculate_Total(string items, int expected)
         {
             var rules_string = File.ReadAllText("rules.json");
