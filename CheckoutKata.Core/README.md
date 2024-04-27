@@ -48,6 +48,7 @@ namespace CheckoutKata.Core
 - /Models
 - /Dtos
 
+# ICheckout.cs
 The ICheckout.cs interface defines the required function of the checkout kata
 
 public interface ICheckout
@@ -56,6 +57,7 @@ public interface ICheckout
     public int GetTotalPrice();
 }
 
+# CheckoutService.cs
 The Services.CheckoutService.cs class implements the ICheckout interface
 
 public CheckoutService(string rules, ILogger<CheckoutService> logger)
@@ -67,6 +69,33 @@ public void Scan(string items)
 
 public int GetTotalPrice()
 - returns the calculated total for all items scanned
+
+# PricingRule.cs
+
+Model class to define a particular pricing rule
+public class PricingRule
+{
+    public string SKU { get; private set; }
+    public int UnitPrice { get; set; }
+    public SpecialPrice? SpecialPrice { get; set; }
+
+
+    public PricingRule(string sku, int unitPrice, SpecialPrice? specialPrice = null)
+    {
+        SKU = sku;
+        UnitPrice = unitPrice;
+        SpecialPrice = specialPrice;
+    }
+}
+
+# SpecialPrice.cs
+
+Model class to define the special price that may be contained in a pricing rule
+public class SpecialPrice
+{
+    public int Units { get; set; }
+    public int Price { get; set; }
+}
 
 ## Unit Tests
 
