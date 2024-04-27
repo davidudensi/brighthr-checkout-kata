@@ -2,12 +2,17 @@ namespace CheckoutKata.Core.Models
 {
     public class SpecialPrice
     {
+        public SpecialPrice(int units, int price)
+        {
+            Units = units;
+            Price = price;
+        }
         private int _units;
         private int _price;
         public int Units
         {
             get { return _units; }
-            set
+            private set
             {
                 if (value > 0)
                 {
@@ -22,7 +27,7 @@ namespace CheckoutKata.Core.Models
         public int Price
         {
             get { return _price; }
-            set
+            private set
             {
                 if (value > 0)
                 {
