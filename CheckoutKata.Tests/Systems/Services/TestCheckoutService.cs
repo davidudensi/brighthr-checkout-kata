@@ -116,5 +116,18 @@ namespace CheckoutKata.Tests.Systems.Services
             var total = sut.GetTotalPrice();
             total.Should().Be(0);
         }
+
+        [Theory]
+        [InlineData("E")]
+        [InlineData("P")]
+        [InlineData("Z")]
+        [InlineData("H")]
+        public void Scan_WhenSKUDoesNotExitInRules_ShouldSkipSKU_CartShouldBeEmpty(string item)
+        {
+            var rules_string = File.ReadAllText("rules.json");  // Rules for A, B, C and D
+            var sut = new CheckoutService(rules_string, logger.Object);
+            sut.Scan(item);
+            sut.CartItems.Should().HaveCount(0);
+        }
     }
 }

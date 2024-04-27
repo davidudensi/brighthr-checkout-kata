@@ -15,7 +15,11 @@ namespace CheckoutKata.Core.Services
         {
             _logger = logger;
 
-            if (string.IsNullOrEmpty(rules)) throw new NullReferenceException();
+            if (string.IsNullOrEmpty(rules))
+            {
+                _logger.LogDebug("Rules string is null or empty");
+                throw new NullReferenceException("Rules string is null or empty");
+            }
             Rules = new Dictionary<string, PricingRule>();
             CartItems = new Dictionary<string, CartItem>();
 
@@ -25,17 +29,19 @@ namespace CheckoutKata.Core.Services
         public int GetTotalPrice()
         {
             if (CartItems == null || CartItems.Count == 0) return 0;
-            int total = CartItems.Values.Sum(c => c.Amount);
-            return total;
+            return CartItems.Values.Sum(c => c.Amount); ;
         }
 
         public void Scan(string items)
         {
-            if (string.IsNullOrEmpty(items)) throw new NullReferenceException();
+            if (string.IsNullOrEmpty(items))
+            {
+                _logger.LogDebug("Items to scan is null or empty");
+                throw new NullReferenceException("Items to scan is null or empty");
+            }
             try
             {
-                List<char> skus = items.ToList();
-                foreach (char sku in skus)
+                foreach (char sku in items.ToList())
                 {
                     var sku_string = sku.ToString();
                     if (!Rules.ContainsKey(sku_string)) continue;
