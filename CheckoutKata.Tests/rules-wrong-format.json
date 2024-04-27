@@ -1,0 +1,8 @@
+{
+  "SKU": "A",
+  "UnitPrice": 50,
+  "SpecialPrice": {
+    "Units": 3,
+    "Price": 130
+  }
+}

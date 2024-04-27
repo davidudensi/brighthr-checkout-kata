@@ -1,0 +1,29 @@
+[
+    {
+      "SKU": "A",
+      "UnitPrice": 50,
+      "SpecialPrice": {
+        "Units": 3,
+        "Price": 130
+      }
+    },
+    {
+      "SKU": "B",
+      "UnitPrice": 30,
+      "SpecialPrice": {
+        "Units": 2,
+        "Price": 45
+      }
+    },
+    {
+      "SKU": "C",
+      "UnitPrice": 20,
+      "SpecialPrice": null
+    },
+    {
+      "SKU": "D",
+      "UnitPrice": 15,
+      "SpecialPrice": null
+    }
+  ]
+  
