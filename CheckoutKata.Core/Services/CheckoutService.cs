@@ -65,6 +65,7 @@ namespace CheckoutKata.Core.Services
 
         public void ClearCart()
         {
+            if (CartItems == null) return;
             CartItems.Clear();
             _logger.LogInformation("Cart has been cleared");
         }
