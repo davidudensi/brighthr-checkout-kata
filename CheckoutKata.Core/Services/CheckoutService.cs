@@ -41,20 +41,17 @@ namespace CheckoutKata.Core.Services
             }
             try
             {
-                foreach (char sku in items.ToList())
+                if (!Rules.ContainsKey(items))
                 {
-                    var sku_string = sku.ToString();
-                    if (!Rules.ContainsKey(sku_string)) continue;
-
-                    var rule = Rules[sku_string];
-                    if (CartItems.ContainsKey(sku_string))
-                        CartItems[sku_string].Quantity++;
-                    else
-                    {
-                        var item = new CartItem(sku_string, rule);
-                        CartItems[sku_string] = item;
-                    }
+                    _logger.LogDebug($"No pricing rule found for {items}");
+                    return;
                 }
+
+                var rule = Rules[items];
+                if (CartItems.ContainsKey(items))
+                    CartItems[items].Quantity++;
+                else
+                    CartItems[items] = new CartItem(items, rule);
             }
             catch (Exception ex)
             {
