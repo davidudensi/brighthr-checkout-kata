@@ -1,6 +1,5 @@
 using CheckoutKata.Core.Models;
 using CheckoutKata.Tests.Fixtures;
-using FluentAssertions;
 
 namespace CheckoutKata.Tests.Systems.Models
 {
@@ -14,7 +13,7 @@ namespace CheckoutKata.Tests.Systems.Models
         public void CreatePricingRule_SKU_IsSet(string sku)
         {
             var sut = new PricingRule(sku, 50);
-            sut.SKU.Should().Be(sku);
+            Assert.Equal(sku, sut.SKU);
         }
 
         [Theory]
@@ -25,7 +24,7 @@ namespace CheckoutKata.Tests.Systems.Models
         public void CreatePricingRule_UnitPrice_IsSet(int unitPrice)
         {
             var sut = new PricingRule("A", unitPrice);
-            sut.UnitPrice.Should().Be(unitPrice);
+            Assert.Equal(unitPrice, sut.UnitPrice);
         }
 
         [Fact]
@@ -33,7 +32,7 @@ namespace CheckoutKata.Tests.Systems.Models
         {
             var specialPrice = SpecialPriceFixture.GetSpecialPrice();
             var sut = new PricingRule("A", 50, specialPrice);
-            sut.SpecialPrice.Should().Be(specialPrice);
+            Assert.Equal(specialPrice, sut.SpecialPrice);
         }
 
         [Fact]

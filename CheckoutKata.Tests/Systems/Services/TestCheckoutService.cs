@@ -1,6 +1,5 @@
 using CheckoutKata.Core.Services;
 using CheckoutKata.Tests.Fixtures;
-using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
 
@@ -30,7 +29,7 @@ namespace CheckoutKata.Tests.Systems.Services
         public void Constructor_ShouldSkipNullEmptySKUs_CreateOneNotTwo()
         {
             var sut = new CheckoutService(PricingRuleFixture.RULES_WITH_EMPTY_SKU, logger.Object);
-            sut.Rules.Should().HaveCount(1);
+            Assert.Equal(1, sut?.Rules.Count);
         }
 
         [Fact]
@@ -53,7 +52,7 @@ namespace CheckoutKata.Tests.Systems.Services
             {
                 sut.Scan(item);
             }
-            sut.CartItems.Should().HaveCount(result);
+            Assert.Equal(result, sut.CartItems.Count);
         }
 
         [Fact]
@@ -70,7 +69,7 @@ namespace CheckoutKata.Tests.Systems.Services
             var sut = new CheckoutService(PricingRuleFixture.RULES_PASSING, logger.Object);
             sut.Scan("AAAA");
             sut.ClearCart();
-            sut.CartItems.Should().HaveCount(0);
+            Assert.Equal(0, sut?.CartItems.Count);
         }
 
         [Fact]
@@ -97,7 +96,7 @@ namespace CheckoutKata.Tests.Systems.Services
                 sut.Scan(item);
             }
             var total = sut.GetTotalPrice();
-            total.Should().Be(expected);
+            Assert.Equal(expected, total);
         }
 
         [Theory]
@@ -111,7 +110,7 @@ namespace CheckoutKata.Tests.Systems.Services
             sut.Scan(items);
             sut.ClearCart();
             var total = sut.GetTotalPrice();
-            total.Should().Be(0);
+            Assert.Equal(0, total);
         }
 
         [Theory]
@@ -123,7 +122,7 @@ namespace CheckoutKata.Tests.Systems.Services
         {
             var sut = new CheckoutService(PricingRuleFixture.RULES_PASSING, logger.Object);
             sut.Scan(item);
-            sut.CartItems.Should().HaveCount(0);
+            Assert.Equal(0, sut?.CartItems.Count);
         }
     }
 }
