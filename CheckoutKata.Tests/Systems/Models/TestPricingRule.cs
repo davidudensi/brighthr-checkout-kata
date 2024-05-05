@@ -41,5 +41,16 @@ namespace CheckoutKata.Tests.Systems.Models
             var sut = new PricingRule("A", 50);
             Assert.Null(sut.SpecialPrice);
         }
+
+        [Theory]
+        [InlineData("A")]
+        [InlineData("AB")]
+        [InlineData("ABC")]
+        [InlineData("ABCD")]
+        public void CreatePricingRule_Accepts_VariableLengthSKUs(string sku)
+        {
+            var sut = new PricingRule(sku, 50);
+            Assert.Equal(sku, sut.SKU);
+        }
     }
 }

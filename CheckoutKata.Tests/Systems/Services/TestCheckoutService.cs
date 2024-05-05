@@ -55,6 +55,21 @@ namespace CheckoutKata.Tests.Systems.Services
             Assert.Equal(result, sut.CartItems.Count);
         }
 
+        [Theory]
+        [InlineData(new string[] { "A", "AB", "ABC", "ABCD" }, 4)]
+        [InlineData(new string[] { "A", "AB", "ABC" }, 3)]
+        [InlineData(new string[] { "A", "AB" }, 2)]
+        [InlineData(new string[] { "A" }, 1)]
+        public void Scan_WhenCalled_UpdatesCart_WithVariableLengthSKUs_CountShouldBeResult(string[] items, int result)
+        {
+            var sut = new CheckoutService(PricingRuleFixture.RULES_VARIABLE_LENGTH_SKUS, logger.Object);
+            foreach (string item in items)
+            {
+                sut.Scan(item);
+            }
+            Assert.Equal(result, sut.CartItems.Count);
+        }
+
         [Fact]
         public void Scan_WhenCalled_UpdatesCart_WithEmptySKUs_ShouldThrowNullReferenceException()
         {
