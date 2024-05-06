@@ -1,6 +1,5 @@
 using CheckoutKata.Core.Models;
 using CheckoutKata.Tests.Fixtures;
-using FluentAssertions;
 
 namespace CheckoutKata.Tests.Systems.Models
 {
@@ -19,11 +18,11 @@ namespace CheckoutKata.Tests.Systems.Models
         [InlineData(2, 100)]
         [InlineData(4, 200)]
         [InlineData(7, 350)]
-        public void CartItem_WhenCreated_RegularRule_Quantities_SKUAmount_IsSet(int quantity, int result)
+        public void CartItem_WhenCreated_RegularRule_Quantities_SKUAmount_IsSet(int quantity, int expected)
         {
             var sut = new CartItem("A", regular_rule);
             sut.Quantity = quantity;
-            sut.Amount.Should().Be(result);
+            Assert.Equal(expected, sut.Amount);
         }
 
         [Theory]
@@ -32,11 +31,11 @@ namespace CheckoutKata.Tests.Systems.Models
         [InlineData(3, 130)]
         [InlineData(4, 180)]
         [InlineData(6, 260)]
-        public void CartItem_WhenCreated_SpecialRule_Quantities_SKUAmount_IsSet(int quantity, int result)
+        public void CartItem_WhenCreated_SpecialRule_Quantities_SKUAmount_IsSet(int quantity, int expected)
         {
             var sut = new CartItem("A", special_rule);
             sut.Quantity = quantity;
-            sut.Amount.Should().Be(result);
+            Assert.Equal(expected, sut.Amount);
         }
     }
 }
